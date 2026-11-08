@@ -1,0 +1,3 @@
+These are the conversion and validation scripts used in the CSI MCP workspace. They expect research/chm-tools/lib dependencies and API/_extracted/{product}-{version} source directories at the workspace root. Install requirements into research/chm-tools/lib, extract the original CHM with 7-Zip, then run research/convert_csi_chm.py and research/validate_csi_conversion.py. Source CHM files and proprietary binaries are not redistributed here.
+
+Copy the provided scripts into the workspace research directory before running. check_csi_links.py and check_csi_anchors.py validate converted Markdown destinations and explicit anchors.

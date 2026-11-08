@@ -1,0 +1,288 @@
+# GetNBCC2015
+
+## Syntax
+
+SapObject.SapModel.LoadPatterns.AutoSeismic.GetNBCC2015
+
+## VB6 Procedure
+
+Function GetNBCC2015(ByVal Name As String, ByRef DirFlag As Long, ByRef eccen As Double, ByRef CtType As Long, ByRef PeriodFlag As Long, ByRef UserT As Double, ByRef UserZ As Boolean, ByRef TopZ As Double, ByRef BottomZ As Double, ByRef PGA As Double, ByRef S02 As Double, ByRef S05 As Double, ByRef S1 As Double, ByRef S2 As Double, ByRef S5 As Double, ByRef S10 As Double, ByRef SiteClass As Long, ByRef F02 As Double, ByRef F05 As Double, ByRef F1 As Double, ByRef F2 As Double, ByRef F5 As Double, ByRef F10 As Double, ByRef I As Double, ByRef Mv As Double, ByRef Rd As Double, ByRef Ro As Double) As Long
+
+## Parameters
+
+Name
+
+The name of an existing Quake-type load pattern with a NBCC2015 auto seismic load assignment.
+
+DirFlag
+
+This is 1 or 2, indicating the seismic load direction.
+
+1 = Global X
+
+2 = Global Y
+
+Eccen
+
+The eccentricity ratio that applies to all diaphragms.
+
+CtType
+
+This is 0, 1, 2, 3 or 4, indicating the structure type.
+
+0 = Steel moment frame
+
+1 = Concrete moment frame
+
+2 = Other moment frame
+
+3 = Braced frame
+
+4 = Shear wall
+
+PeriodFlag
+
+This is 1, 2 or 3, indicating the time period option.
+
+1 = Code
+
+2 = Program calculated
+
+3 = User defined
+
+UserT
+
+The user specified time period. This item applies when the PeriodFlag item is 3. [s]
+
+UserZ
+
+This item is True if the top and bottom elevations of the seismic load are user specified. It is False if the elevations are determined by the program.
+
+TopZ
+
+This item applies only when the UserZ item is True. It is the global Z-coordinate at the highest level where auto seismic loads are applied. [L]
+
+BottomZ
+
+This item applies only when the UserZ item is True. It is the global Z-coordinate at the lowest level where auto seismic loads are applied. [L]
+
+PGA
+
+The peak ground acceleration.
+
+S02
+
+The spectral acceleration at a 0.2 second period.
+
+S05
+
+The spectral acceleration at a 0.5 second period.
+
+S1
+
+The spectral acceleration at a 1 second period.
+
+S2
+
+The spectral acceleration at a 2 second period.
+
+S5
+
+The spectral acceleration at a 5 second period.
+
+S10
+
+The spectral acceleration at a 10 second period.
+
+SiteClass
+
+This is 1, 2, 3, 4, 5 or 6, indicating the site class.
+
+1 = A
+
+2 = B
+
+3 = C
+
+4 = D
+
+5 = E
+
+6 = F
+
+F02
+
+The site coefficient at a 0.2 second period. This item is read when the site class is F only.
+
+F05
+
+The site coefficient at a 0.5 second period. This item is read when the site class is F only.
+
+F1
+
+The site coefficient at a 1 second period. This item is read when the site class is F only.
+
+F2
+
+The site coefficient at a 2 second period. This item is read when the site class is F only.
+
+F5
+
+The site coefficient at a 5 second period. This item is read when the site class is F only.
+
+F10
+
+The site coefficient at a 10 second period. This item is read when the site class is F only.
+
+I
+
+The importance factor.
+
+Mv
+
+The higher mode factor.
+
+Rd
+
+The ductility modifier.
+
+Ro
+
+The overstrength modifier.
+
+## Remarks
+
+This function retrieves auto seismic loading parameters for the 2015 NBCC code.
+
+The function returns zero if the parameters are successfully retrieved; otherwise it returns a nonzero value.
+
+## VBA Example
+
+
+
+```
+Sub GetSeismicParametersNBCC2015()
+
+   'dimension variables
+
+      Dim SapObject as cOAPI
+
+      Dim SapModel As cSapModel
+
+      Dim ret As Long
+
+      Dim DirFlag As Long
+
+      Dim Eccen As Double
+
+      Dim CtType As Long
+
+      Dim PeriodFlag As Long
+
+      Dim UserT As Double
+
+      Dim UserZ As Boolean
+
+      Dim TopZ As Double
+
+      Dim BottomZ As Double
+
+      Dim PGA As Double
+
+      Dim S02 As Double
+
+      Dim S05 As Double
+
+      Dim S1 As Double
+
+      Dim S2 As Double
+      Dim S5 As Double
+      Dim S10 As Double
+
+      Dim SiteClass As Long
+
+      Dim F02 As Double
+
+      Dim F05 As Double
+      Dim F1 As Double
+      Dim F5 As Double
+      Dim F10 As Double
+
+      Dim I As Double
+
+      Dim Mv As Double
+
+      Dim Rd As Double
+
+      Dim Ro As Double
+
+
+
+   'create Sap2000 object
+
+      Set SapObject = CreateObject("CSI.SAP2000.API.SapObject")
+
+
+
+   'start Sap2000 application
+
+      SapObject.ApplicationStart
+
+
+
+   'create SapModel object
+
+      Set SapModel = SapObject.SapModel
+
+
+
+   'initialize model
+
+      ret = SapModel.InitializeNewModel
+
+
+
+   'create model from template
+
+      ret = SapModel.File.New3DFrame(BeamSlab, 2, 144, 3, 336, 2, 432)
+
+
+
+   'add new load pattern
+
+      ret = SapModel.LoadPatterns.Add("EQX", LTYPE_QUAKE)
+
+
+
+   'assign NBCC2015 parameters
+
+      ret = SapModel.LoadPatterns.AutoSeismic.SetNBCC2015("EQX", 2, 0.1, 2, 1, 0, False, 0, 0, 0.6, 1.1, 0.7, 0.35, 0.2, 0.03, 0.01, 6, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.5, 1.2, 6, 1.6)
+
+
+
+   'get NBCC2015 parameters
+
+      ret = SapModel.LoadPatterns.AutoSeismic.GetNBCC2015("EQX", DirFlag, Eccen, CtType, PeriodFlag, UserT, UserZ, TopZ, BottomZ, PGA, S02, S05, S1, S2, S5, S10, SiteClass, F02, F05, F1, F2, F5, F10, I, Mv, Rd, Ro)
+
+
+
+   'close Sap2000
+
+      SapObject.ApplicationExit False
+
+      Set SapModel = Nothing
+
+      Set SapObject = Nothing
+
+End Sub
+```
+
+
+
+## Release Notes
+
+Initial release in version 19.0.0.
+
+## See Also
+
+[SetNBCC2015](SetNBCC2015_%7BAuto_Seismic%7D.md)

@@ -1,0 +1,97 @@
+# InvertSelection
+
+## Syntax
+
+SapObject.SapModel.SelectObj.InvertSelection
+
+## VB6 Procedure
+
+Function InvertSelection() As Long
+
+## Parameters
+
+None
+
+## Remarks
+
+This function deselects all selected objects and selects all unselected objects; that is, it inverts the selection.
+
+The function returns zero if the selection is successfully inverted, otherwise it returns nonzero.
+
+## VBA Example
+
+
+
+```
+Sub InvertTheSelection()
+
+   'dimension variables
+
+      Dim SapObject as cOAPI
+
+      Dim SapModel As cSapModel
+
+      Dim ret as Long
+
+
+
+   'create Sap2000 object
+
+      Set SapObject = CreateObject("CSI.SAP2000.API.SapObject")
+
+
+
+   'start Sap2000 application
+
+      SapObject.ApplicationStart
+
+
+
+   'create SapModel object
+
+      Set SapModel = SapObject.SapModel
+
+
+
+   'initialize model
+
+      ret = SapModel.InitializeNewModel
+
+
+
+   'create model from template
+
+      ret = SapModel.File.New2DFrame(PortalFrame, 3, 124, 3, 200)
+
+
+
+   'select objects
+
+      ret = SapModel.SelectObj.PlaneXY("2")
+
+
+
+   'invert the selection
+
+      ret = SapModel.SelectObj.InvertSelection
+
+
+
+   'close Sap2000
+
+      SapObject.ApplicationExit False
+
+      Set SapModel = Nothing
+
+      Set SapObject = Nothing
+
+End Sub
+```
+
+
+
+## Release Notes
+
+Initial release in version 11.00.
+
+## See Also
